@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { app, database } from "../../../firbaseConfig";
 import {
@@ -20,7 +21,6 @@ export const Login = () => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, logdata.email, logdata.password)
       .then((userCredential) => {
-        // console.log(userCredential.user);
         navigate("/home");
       })
       .catch((error) => {
