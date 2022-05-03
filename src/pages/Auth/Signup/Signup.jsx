@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { app } from "../../../firbaseConfig";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Signup = () => {
   const [signupdata, setSignupData] = useState([]);
@@ -33,23 +33,7 @@ export const Signup = () => {
         className="bg-slate-800 max-w-xs h-auto p-4 m-auto mt-12 flex flex-col items-center justify-center gap-3 text-cyan-50 rounded-lg drop-shadow-2xl border-gray-50 border-2"
       >
         <div className="flex flex-row items-start justify-center gap-4 text-2xl font-extrabold border-b p-1 w-full">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/");
-            }}
-          >
-            Login
-          </button>
-          |
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/signup");
-            }}
-          >
-            Signup
-          </button>
+          <Link to="/">Login</Link>|<Link to="/signup">Signup</Link>
         </div>
 
         <p>Start Sharing Gaming moments</p>
@@ -111,8 +95,9 @@ export const Signup = () => {
         </label>
 
         <button
-          onClick={SignUpHandler}
+          type="submit"
           className="border-2 border-gray-50 shadow-md hover:text-slate-600 hover:bg-slate-50 cursor-pointer rounded-lg p-1 w-full font-bold"
+          onClick={SignUpHandler}
         >
           SIGNUP
         </button>
