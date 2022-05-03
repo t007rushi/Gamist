@@ -15,6 +15,7 @@ const AuthProvider = ({ children }) => {
       onAuthStateChanged(auth, (user) => {
           if (user) {
             setUserData(user);
+            navigate("/home");
           } else {
             setUserData(user);
               navigate("/");
