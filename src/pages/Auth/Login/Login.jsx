@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { app, database } from "../../../firbaseConfig";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -10,11 +8,15 @@ import {
   FacebookAuthProvider,
 } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../../features/auth/authSlice";
 
 export const Login = () => {
   const [logdata, setLogData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const auth = getAuth();
+  const dispatch = useDispatch();
+
 
   //login
   const LoginHandler = (e) => {
@@ -22,6 +24,7 @@ export const Login = () => {
     signInWithEmailAndPassword(auth, logdata.email, logdata.password)
       .then((userCredential) => {
         navigate("/home");
+        dispatch(userLogin({name:userCredential.user.displayName,email:userCredential.user.email}))
       })
       .catch((error) => {
         console.log(error.message);
@@ -32,8 +35,7 @@ export const Login = () => {
   const handleGLogin = () => {
     signInWithPopup(auth, Gprovider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
+        dispatch(userLogin({name:result.user.displayName,email:result.user.email}))
         navigate("/home");
       })
       .catch((error) => {
@@ -45,8 +47,7 @@ export const Login = () => {
   const handleTLogin = () => {
     signInWithPopup(auth, Tprovider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = TwitterAuthProvider.credentialFromResult(result);
+        dispatch(userLogin({name:result.user.displayName,email:result.user.email}))
         navigate("/home");
       })
       .catch((error) => {
@@ -58,8 +59,7 @@ export const Login = () => {
   const handleFLogin = () => {
     signInWithPopup(auth, Fprovider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
+        dispatch(userLogin({name:result.user.displayName,email:result.user.email}))
         navigate("/home");
       })
       .catch((error) => {
