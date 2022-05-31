@@ -8,7 +8,7 @@ export const CreatePost = () => {
     content: "",
   });
 
-  const collectionRef = collection(database, "user");
+  const collectionRef = collection(database, "posts");
 // console.log(store.getState())
   const handleSubmit = () => {
     addDoc(collectionRef, {
@@ -20,14 +20,15 @@ export const CreatePost = () => {
   };
   return (
     <div className="flex flex-col gap-4">
-      <textarea
+
+      <input
         name=""
         id=""
-        cols="50"
-        rows="5"
+        className="border-black border-2 p-6 rounded-2xl"
         value={postData.content}
         onChange={(e) => setPostData({ ...postData, content: e.target.value })}
-      ></textarea>
+      ></input>
+
       <button
         type="button"
         className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
