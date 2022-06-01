@@ -1,33 +1,42 @@
 import React, { useState } from "react";
 import { database } from "../firbaseConfig";
 import { collection, addDoc } from "firebase/firestore";
-// import store from "../app/store"
+import { useSelector } from "react-redux";
 
 export const CreatePost = () => {
   const [postData, setPostData] = useState({
-    content: "",
+    title:"",
+    description: "",
   });
+  const { username } = useSelector((state) => state.auth);
 
   const collectionRef = collection(database, "posts");
-// console.log(store.getState())
   const handleSubmit = () => {
     addDoc(collectionRef, {
-      content: postData.content,
+      description: postData.description,
+      title: postData.title,
+      user:username,
     })
-      .then(() => alert("Data Added"))
+      .then(() => {})
       .catch((err) => console.log(err));
-      setPostData({ ...postData, content: "" });
+    setPostData({  title:"", description: "" });
   };
   return (
     <div className="flex flex-col gap-4">
-
-      <input
+      <input type="text" className="border-black border-2 p-2 rounded-lg" placeholder="Title of post"
+      value={postData.title}
+      onChange={(e) => setPostData({ ...postData, title: e.target.value })}
+      />
+      <textarea
         name=""
         id=""
-        className="border-black border-2 p-6 rounded-2xl"
-        value={postData.content}
-        onChange={(e) => setPostData({ ...postData, content: e.target.value })}
-      ></input>
+        cols="40"
+        rows="3"
+        className="border-black border-2 p-2 rounded-lg"
+        placeholder="Description of post"
+        value={postData.description}
+        onChange={(e) => setPostData({ ...postData, description: e.target.value })}
+      ></textarea>
 
       <button
         type="button"
