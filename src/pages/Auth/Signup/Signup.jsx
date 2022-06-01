@@ -18,7 +18,7 @@ export const Signup = () => {
       .then((userCredential) => {
         dispatch(
           userSignup({
-            name: userCredential.user.displayName,
+            name: signupdata.first,
             email: userCredential.user.email,
           })
         );
