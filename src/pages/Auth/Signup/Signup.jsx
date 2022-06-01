@@ -3,17 +3,25 @@ import React, { useState } from "react";
 import { app } from "../../../firbaseConfig";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { userSignup } from "../../../features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 export const Signup = () => {
   const [signupdata, setSignupData] = useState([]);
   const auth = getAuth();
+  const dispatch = useDispatch();
 
   //signup
   const SignUpHandler = (e) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, signupdata.email, signupdata.password)
       .then((userCredential) => {
-        const user = userCredential.user;
+        dispatch(
+          userSignup({
+            name: userCredential.user.displayName,
+            email: userCredential.user.email,
+          })
+        );
         navigate("/home");
       })
       .catch((error) => {
