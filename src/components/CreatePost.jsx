@@ -5,27 +5,30 @@ import { useSelector } from "react-redux";
 
 export const CreatePost = () => {
   const [postData, setPostData] = useState({
-    title:"",
+    title: "",
     description: "",
   });
-  const { username } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const collectionRef = collection(database, "posts");
   const handleSubmit = () => {
     addDoc(collectionRef, {
       description: postData.description,
       title: postData.title,
-      user:username,
+      user: user.firstName,
     })
       .then(() => {})
       .catch((err) => console.log(err));
-    setPostData({  title:"", description: "" });
+    setPostData({ title: "", description: "" });
   };
   return (
     <div className="flex flex-col gap-4">
-      <input type="text" className="border-black border-2 p-2 rounded-lg" placeholder="Title of post"
-      value={postData.title}
-      onChange={(e) => setPostData({ ...postData, title: e.target.value })}
+      <input
+        type="text"
+        className="border-black border-2 p-2 rounded-lg"
+        placeholder="Title of post"
+        value={postData.title}
+        onChange={(e) => setPostData({ ...postData, title: e.target.value })}
       />
       <textarea
         name=""
@@ -35,7 +38,9 @@ export const CreatePost = () => {
         className="border-black border-2 p-2 rounded-lg"
         placeholder="Description of post"
         value={postData.description}
-        onChange={(e) => setPostData({ ...postData, description: e.target.value })}
+        onChange={(e) =>
+          setPostData({ ...postData, description: e.target.value })
+        }
       ></textarea>
 
       <button
