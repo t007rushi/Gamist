@@ -3,10 +3,12 @@ import { useOnClickOutside } from "../hooks/onClickOutside";
 import { deleteDoc, doc } from "firebase/firestore";
 import { database } from "../firbaseConfig";
 import { useSelector } from "react-redux";
+import { EditPost } from "./EditPost";
 
 export const PostCard = ({ user, title, description, id }) => {
   const {username} = useSelector((state) => state.auth);
   const [postModal, setPostModal] = useState(false);
+  const [edit,setEdit] = useState(false);
   const optionref = useRef();
   useOnClickOutside(optionref, () => setPostModal(false));
 
@@ -36,6 +38,7 @@ export const PostCard = ({ user, title, description, id }) => {
             <button
               type="button"
               className="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
+            onClick={() => setEdit(true)}
             >
               <i className="fa-solid fa-pen-to-square"></i>
               Edit
@@ -65,6 +68,7 @@ export const PostCard = ({ user, title, description, id }) => {
         <i className="fa-solid fa-share"></i>
         <i className="fa-regular fa-bookmark"></i>
       </div>
+      {edit && <EditPost setFalse = {() => setEdit(false)}/>}
     </div>
   );
 };

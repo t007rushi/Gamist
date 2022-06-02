@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { Home, Login, Signup } from "../../pages";
+import { Home, Login, Profile, Signup } from "../../pages";
 
 export const Main = () => {
   return (
@@ -9,6 +9,7 @@ export const Main = () => {
         <Route path="/" element={<Login/>}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/home" element={<Home />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
       </Routes>
     </div>
   );
