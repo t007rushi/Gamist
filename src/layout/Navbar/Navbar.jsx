@@ -2,7 +2,7 @@
 import React from "react";
 import { app } from "../../firbaseConfig";
 import { signOut, getAuth } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../../features/auth/authSlice";
 
@@ -37,9 +37,9 @@ export const Navbar = () => {
           <button className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-square-plus"></i>
           </button>
-          <button className=" p-2 text-2xl">
+          <Link to="/profile" className=" p-2 text-2xl">
             <i className="fa-solid fa-user"></i>
-          </button>
+          </Link>
           <button className="p-2 m-2 text-2xl" onClick={signmeout}>
             <i className="fa-solid fa-arrow-right-from-bracket"></i>
           </button>
