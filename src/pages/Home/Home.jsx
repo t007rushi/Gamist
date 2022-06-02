@@ -14,7 +14,7 @@ export const Home = () => {
     posts.push({ ...doc.data(), id: doc.id });
   });
   return (
-    <div className="flex justify-center gap-4 text-gray-900 mt-20">
+    <div className="flex justify-center gap-4 text-gray-900 mt-20 relative">
       {/* POSTS FEED */}
       <div className="posts">
         {/* CREATE POST */}
@@ -24,7 +24,7 @@ export const Home = () => {
         {/* Others Posts to read */}
         <div className="posts-column flex flex-col-reverse gap-4">
           {posts.map((post) => {
-            return <PostCard {...post} />;
+            return <PostCard {...post} key={post.id}/>;
           })}
         </div>
       </div>
