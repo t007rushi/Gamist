@@ -56,12 +56,12 @@ export const SignIn = createAsyncThunk(
 export const handleGLogin = createAsyncThunk("auth/GoogleSignIn", async () => {
   const Gprovider = new GoogleAuthProvider();
   try {
-    const userdata = {firstName:"",email:""}
+    const userdata = { firstName: "", email: "" };
     await signInWithPopup(auth, Gprovider).then((userCred) => {
-      userdata.firstName= userCred.user.displayName;
-      userdata.email= userCred.user.email;
+      userdata.firstName = userCred.user.displayName;
+      userdata.email = userCred.user.email;
     });
-    return userdata
+    return userdata;
   } catch (error) {
     console.log(error.message);
   }
@@ -78,15 +78,17 @@ export const handleTLogin = createAsyncThunk("auth/TwitterSignIn", async () => {
 });
 
 //facebook auth
-export const handleFLogin = createAsyncThunk("auth/FacebookSignIn", async () => {
-  try {
-    const Fprovider = new FacebookAuthProvider();
-    await signInWithPopup(auth, Fprovider).then((userCred) => {
-    });
-  } catch (error) {
-    console.log(error.message);
+export const handleFLogin = createAsyncThunk(
+  "auth/FacebookSignIn",
+  async () => {
+    try {
+      const Fprovider = new FacebookAuthProvider();
+      await signInWithPopup(auth, Fprovider).then((userCred) => {});
+    } catch (error) {
+      console.log(error.message);
+    }
   }
-});
+);
 
 //signup
 export const SignUp = createAsyncThunk(
@@ -119,8 +121,7 @@ export const SignUp = createAsyncThunk(
 export const SignOut = createAsyncThunk("auth/SignOut", () => {
   try {
     const auth = getAuth(app);
-    signOut(auth).then(() => {
-    });
+    signOut(auth).then(() => {});
   } catch (error) {
     console.error(error);
     return Promise.reject(error);
