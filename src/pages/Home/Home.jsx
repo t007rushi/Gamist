@@ -2,8 +2,17 @@
 import React from "react";
 import { CreatePost } from "../../components/CreatePost";
 import { PostCard } from "../../components/PostCard";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { database } from "../../firbaseConfig";
+import { collection } from "firebase/firestore";
 
 export const Home = () => {
+  const collectionRef = collection(database, "posts");
+  let posts = [];
+  const [snapshot] = useCollection(collectionRef);
+  snapshot?.docs?.forEach((doc) => {
+    posts.push({ ...doc.data(), id: doc.id });
+  });
   return (
     <div className="flex justify-center gap-4 text-gray-900 mt-20">
       {/* POSTS FEED */}
@@ -13,17 +22,10 @@ export const Home = () => {
           <CreatePost />
         </div>
         {/* Others Posts to read */}
-        <div className="posts-column flex flex-col gap-4">
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
+        <div className="posts-column flex flex-col-reverse gap-4">
+          {posts.map((post) => {
+            return <PostCard {...post} />;
+          })}
         </div>
       </div>
       {/* Suggetsions  */}
