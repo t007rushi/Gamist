@@ -41,7 +41,6 @@ export const SignIn = createAsyncThunk(
   "auth/SignIn",
   async ({ email, password }) => {
     try {
-      console.log(email, password);
       const auth = getAuth(app);
       const data = await signInWithEmailAndPassword(auth, email, password);
       const userDoc = await getDoc(doc(database, "users", data.user.uid));
@@ -72,8 +71,7 @@ export const handleGLogin = createAsyncThunk("auth/GoogleSignIn", async () => {
 export const handleTLogin = createAsyncThunk("auth/TwitterSignIn", async () => {
   try {
     const Tprovider = new TwitterAuthProvider();
-    await signInWithPopup(auth, Tprovider).then((userCred) => {
-      console.log(userCred)});
+    await signInWithPopup(auth, Tprovider).then((userCred) => {});
   } catch (error) {
     console.log(error.message);
   }
@@ -84,7 +82,6 @@ export const handleFLogin = createAsyncThunk("auth/FacebookSignIn", async () => 
   try {
     const Fprovider = new FacebookAuthProvider();
     await signInWithPopup(auth, Fprovider).then((userCred) => {
-      console.log(userCred)
     });
   } catch (error) {
     console.log(error.message);
@@ -123,7 +120,6 @@ export const SignOut = createAsyncThunk("auth/SignOut", () => {
   try {
     const auth = getAuth(app);
     signOut(auth).then(() => {
-      console.log("logged out");
     });
   } catch (error) {
     console.error(error);
@@ -221,7 +217,6 @@ const authSlice = createSlice({
       state.signInStatus = "pending";
     },
     [handleGLogin.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.isLoggedIn = true;
       state.user = action.payload;
       state.signInStatus = "succeed";
