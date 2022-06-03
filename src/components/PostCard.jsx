@@ -5,7 +5,7 @@ import { database } from "../firbaseConfig";
 import { useSelector } from "react-redux";
 
 export const PostCard = ({ user, title, description, id }) => {
-  const {username} = useSelector((state) => state.auth);
+  const {user:{firstName}} = useSelector((state) => state.auth);
   const [postModal, setPostModal] = useState(false);
   const optionref = useRef();
   useOnClickOutside(optionref, () => setPostModal(false));
@@ -22,12 +22,14 @@ export const PostCard = ({ user, title, description, id }) => {
           <i className="fa-solid fa-user p-2 m-1 rounded-2xl border border-slate-900"></i>
           <p>{user}</p>
         </div>
-        {username === user && <div
+        {firstName === user &&
+         <div
           className="text-2xl cursor-pointer"
           onClick={() => setPostModal((prev) => !prev)}
         >
           ...
-        </div>}
+        </div>
+         } 
         {postModal && (
           <div
             ref={optionref}
