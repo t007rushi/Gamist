@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { EditPost } from "./EditPost";
 
 export const PostCard = ({ user, title, description, id }) => {
-  const {username} = useSelector((state) => state.auth);
+  const {user:{firstName}} = useSelector((state) => state.auth);
   const [postModal, setPostModal] = useState(false);
   const [edit,setEdit] = useState(false);
   const optionref = useRef();
@@ -24,12 +24,14 @@ export const PostCard = ({ user, title, description, id }) => {
           <i className="fa-solid fa-user p-2 m-1 rounded-2xl border border-slate-900"></i>
           <p>{user}</p>
         </div>
-        {username === user && <div
+        {firstName === user &&
+         <div
           className="text-2xl cursor-pointer"
           onClick={() => setPostModal((prev) => !prev)}
         >
           ...
-        </div>}
+        </div>
+         } 
         {postModal && (
           <div
             ref={optionref}

@@ -1,71 +1,42 @@
-import React, { useState } from "react";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  TwitterAuthProvider,
-  FacebookAuthProvider,
-} from "firebase/auth";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { userLogin } from "../../../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleFLogin,
+  handleGLogin,
+  handleTLogin,
+  SignIn,
+} from "../../../features/auth/authSlice";
 
 export const Login = () => {
   const [logdata, setLogData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-  const auth = getAuth();
   const dispatch = useDispatch();
-
+  const { isLoggedIn } = useSelector((state) => state.auth);
 
   //login
   const LoginHandler = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, logdata.email, logdata.password)
-      .then((userCredential) => {
-        navigate("/home");
-        dispatch(userLogin({name:userCredential.user.displayName,email:userCredential.user.email}))
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    try {
+      const userdata = dispatch(
+        SignIn({ email: logdata.email, password: logdata.password })
+      ).unwrap();
+      console.log(userdata);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
-  const Gprovider = new GoogleAuthProvider();
-  const handleGLogin = () => {
-    signInWithPopup(auth, Gprovider)
-      .then((result) => {
-        dispatch(userLogin({name:result.user.displayName,email:result.user.email}))
-        navigate("/home");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/home");
+    } else {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
 
-  const Tprovider = new TwitterAuthProvider();
-  const handleTLogin = () => {
-    signInWithPopup(auth, Tprovider)
-      .then((result) => {
-        dispatch(userLogin({name:result.user.displayName,email:result.user.email}))
-        navigate("/home");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
-
-  const Fprovider = new FacebookAuthProvider();
-  const handleFLogin = () => {
-    signInWithPopup(auth, Fprovider)
-      .then((result) => {
-        dispatch(userLogin({name:result.user.displayName,email:result.user.email}))
-        navigate("/home");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
   return (
     <div
       className="fixed bg-center w-screen h-full bg-no-repeat bg-cover"
@@ -107,26 +78,26 @@ export const Login = () => {
           />
         </label>
         <button
-          onClick={(e) => LoginHandler(e)}
+          onClick={LoginHandler}
           className="border-2 border-gray-50 shadow-md hover:text-slate-600 hover:bg-slate-50 cursor-pointer rounded-lg p-1 w-full font-bold"
         >
           LOGIN
         </button>
         <h1>- OR -</h1>
         <div
-          onClick={handleGLogin}
+          onClick={() => dispatch(handleGLogin())}
           className="border-2 border-gray-50 shadow-md hover:text-slate-600 hover:bg-slate-50 cursor-pointer rounded-lg p-1 w-full text-center"
         >
           Log In with Google
         </div>
         <div
-          onClick={handleTLogin}
+          onClick={() => dispatch(handleTLogin())}
           className="border-2 border-gray-50 shadow-md hover:text-slate-600 hover:bg-slate-50 cursor-pointer rounded-lg p-1 w-full text-center"
         >
           Log In with Twitter
         </div>
         <div
-          onClick={handleFLogin}
+          onClick={() => dispatch(handleFLogin())}
           className="border-2 border-gray-50 shadow-md hover:text-slate-600 hover:bg-slate-50 cursor-pointer rounded-lg p-1 w-full text-center"
         >
           Log In with Facebook
