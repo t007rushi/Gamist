@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { database } from "../firbaseConfig";
-import { collection, addDoc } from "firebase/firestore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { createPost } from "../features/posts/postSlice";
 
 export const CreatePost = () => {
   const [postData, setPostData] = useState({
@@ -9,16 +8,20 @@ export const CreatePost = () => {
     description: "",
   });
   const { user } = useSelector((state) => state.auth);
-
-  const collectionRef = collection(database, "posts");
+  const dispatch = useDispatch();
   const handleSubmit = () => {
-    addDoc(collectionRef, {
-      description: postData.description,
-      title: postData.title,
-      user: user.firstName,
-    })
-      .then(() => {})
-      .catch((err) => console.log(err));
+    try {
+      dispatch(
+        createPost({
+          description: postData.description,
+          title: postData.title,
+          user: user.firstName,
+          userId: user.userId,
+        })
+      );
+    } catch (err) {
+      console.log(err);
+    }
     setPostData({ title: "", description: "" });
   };
   return (
