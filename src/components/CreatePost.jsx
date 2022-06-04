@@ -9,6 +9,7 @@ export const CreatePost = () => {
   });
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
   const handleSubmit = () => {
     try {
       dispatch(
@@ -24,6 +25,7 @@ export const CreatePost = () => {
     }
     setPostData({ title: "", description: "" });
   };
+  
   return (
     <div className="flex flex-col gap-4">
       <input

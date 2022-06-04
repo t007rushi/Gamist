@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useOnClickOutside } from "../hooks/onClickOutside";
 import { useDispatch, useSelector } from "react-redux";
 import { EditPost } from "./EditPost";
-import { deletePost } from "../features/posts/postSlice";
+import { deletePost, getAllPosts } from "../features/posts/postSlice";
 
 export const PostCard = ({ user, title, description, postId }) => {
   const {
@@ -45,7 +45,11 @@ export const PostCard = ({ user, title, description, postId }) => {
             <button
               type="button"
               className="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium rounded-b-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
-              onClick={() => dispatch(deletePost(postId))}
+              onClick={() => {
+                setPostModal(false);
+                dispatch(deletePost(postId));
+                dispatch(getAllPosts());
+              }}
             >
               <i className="fa-solid fa-trash"></i>
               Delete
