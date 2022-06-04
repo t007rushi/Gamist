@@ -56,10 +56,16 @@ export const SignIn = createAsyncThunk(
 export const handleGLogin = createAsyncThunk("auth/GoogleSignIn", async () => {
   const Gprovider = new GoogleAuthProvider();
   try {
-    const userdata = { firstName: "", email: "" };
+    const userdata = { firstName: "", email: "", userId: "" };
     await signInWithPopup(auth, Gprovider).then((userCred) => {
       userdata.firstName = userCred.user.displayName;
       userdata.email = userCred.user.email;
+      userdata.userId = userCred.user.uid;
+      setDoc(doc(database, "users", userCred.user.uid), {
+        firstName: userCred.user.displayName,
+        email: userCred.user.email,
+        userId: userCred.user.uid,
+      });
     });
     return userdata;
   } catch (error) {
@@ -102,13 +108,13 @@ export const SignUp = createAsyncThunk(
         firstName,
         lastName,
         email,
-        id: data.user.uid,
+        userId: data.user.uid,
       });
       return {
         firstName,
         lastName,
         email,
-        id: data.user.uid,
+        userId: data.user.uid,
       };
     } catch (error) {
       console.error(error);

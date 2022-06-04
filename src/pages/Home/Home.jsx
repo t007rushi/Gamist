@@ -1,20 +1,19 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CreatePost } from "../../components/CreatePost";
 import { PostCard } from "../../components/PostCard";
-import { useCollection } from "react-firebase-hooks/firestore";
-import { database } from "../../firbaseConfig";
-import { collection } from "firebase/firestore";
+import { getAllPosts } from "../../features/posts/postSlice";
 
 export const Home = () => {
-  const collectionRef = collection(database, "posts");
-  let posts = [];
-  const [snapshot] = useCollection(collectionRef);
-  snapshot?.docs?.forEach((doc) => {
-    posts.push({ ...doc.data(), id: doc.id });
-  });
+  const dispatch = useDispatch();
+  const { posts } = useSelector((state) => state.posts);
+
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, []);
   return (
-    <div className="flex justify-center gap-4 text-gray-900 mt-20 relative">
+    <div className="flex justify-center gap-4 text-gray-900 mt-20">
       {/* POSTS FEED */}
       <div className="posts">
         {/* CREATE POST */}
@@ -24,7 +23,7 @@ export const Home = () => {
         {/* Others Posts to read */}
         <div className="posts-column flex flex-col-reverse gap-4">
           {posts.map((post) => {
-            return <PostCard {...post} key={post.id}/>;
+            return <PostCard {...post} key={post.id} />;
           })}
         </div>
       </div>
@@ -36,7 +35,7 @@ export const Home = () => {
               Suggestions for you
             </h5>
             <a
-              href="#"
+              href="_blank"
               className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
             >
               View all
