@@ -23,17 +23,16 @@ import {
 import { app, database } from "../../firbaseConfig";
 const auth = getAuth();
 const initialState = {
-  username: null,
-  email: null,
   isLoggedIn: false,
   user: {},
-  otherUserDetails: {},
   users: [],
   error: null,
   signUpStatus: "idle",
   signInStatus: "idle",
   signOutStatus: "idle",
   getUserStatus: "idle",
+  // updateUserDetailsStatus:"idle",
+  UserDetailsStatus:"idle",
 };
 
 //signin
@@ -157,20 +156,6 @@ export const getAllUsers = createAsyncThunk(
   }
 );
 
-//getUserProfile
-export const getUserProfileDetails = createAsyncThunk(
-  "auth/getUserProfileDetails",
-  async (userId) => {
-    try {
-      const userRef = doc(database, "users", userId);
-      const userData = await getDoc(userRef);
-      return userData.data();
-    } catch (error) {
-      console.error(error);
-      return Promise.reject(error);
-    }
-  }
-);
 
 //updateUserDetails
 export const updateUserDetails = createAsyncThunk(
@@ -281,6 +266,16 @@ const authSlice = createSlice({
     [getAllUsers.rejected]: (state, action) => {
       state.error = action.error.message;
       state.getUserStatus = "failed";
+    },
+    [updateUserDetails.pending]: (state, action) => {
+      state.updateUserDetailsStatus = "pending";
+    },
+    [updateUserDetails.fulfilled]: (state, action) => {
+      state.user = action.payload;
+      state.updateUserDetailsStatus = "succeed";
+    },
+    [updateUserDetails.rejected]: (state, action) => {
+      state.updateUserDetailsStatus = "failed";
     },
   },
 });

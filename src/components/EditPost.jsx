@@ -17,7 +17,7 @@ export const EditPost = ({ setFalse, id, title, description }) => {
       ></i>
       <input
         type="text"
-        className="border-black border-2 p-2 rounded-lg"
+        className="border-black border-2 p-2 rounded-lg text-black"
         placeholder="Title of post"
         value={postData.title}
         onChange={(e) => setPostData({ ...postData, title: e.target.value })}
@@ -27,7 +27,7 @@ export const EditPost = ({ setFalse, id, title, description }) => {
         id=""
         cols="40"
         rows="3"
-        className="border-black border-2 p-2 rounded-lg"
+        className="border-black border-2 p-2 rounded-lg text-black"
         placeholder="Description of post"
         value={postData.description}
         onChange={(e) =>

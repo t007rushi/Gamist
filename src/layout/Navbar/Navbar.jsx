@@ -41,6 +41,9 @@ export const Navbar = () => {
           >
             <i className="fa-solid fa-house"></i>
           </button>
+          <button title="bookmark" className="p-2 m-2 text-2xl">
+            <i className="fa-solid fa-bookmark"></i>
+          </button>
           <button title="message" className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-message"></i>
           </button>
