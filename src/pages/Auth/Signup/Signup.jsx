@@ -1,22 +1,17 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
-import { app } from "../../../firbaseConfig";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { SignUp } from "../../../features/auth/authSlice";
 
 export const Signup = () => {
   const [signupdata, setSignupData] = useState([]);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { isLoggedIn } = useSelector((state) => state.auth);
 
   //signup
   const SignUpHandler = (e) => {
     e.preventDefault();
     try {
-      const userdata = dispatch(
+      dispatch(
         SignUp({
           firstName: signupdata.first,
           lastName: signupdata.last,
@@ -28,15 +23,6 @@ export const Signup = () => {
       console.log(error.message);
     }
   };
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/home");
-    } else {
-      navigate("/");
-    }
-  }, [isLoggedIn]);
-
   return (
     <div
       className="fixed bg-center w-screen h-full bg-no-repeat bg-cover"

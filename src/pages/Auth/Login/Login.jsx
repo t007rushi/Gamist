@@ -1,8 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
-
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import {
   handleFLogin,
   handleGLogin,
@@ -12,9 +10,7 @@ import {
 
 export const Login = () => {
   const [logdata, setLogData] = useState({ email: "", password: "" });
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSelector((state) => state.auth);
 
   //login
   const LoginHandler = (e) => {
@@ -28,14 +24,6 @@ export const Login = () => {
       console.log(error.message);
     }
   };
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/home");
-    } else {
-      navigate("/");
-    }
-  }, [isLoggedIn]);
 
   return (
     <div

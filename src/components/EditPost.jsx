@@ -1,33 +1,20 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { createPost } from "../features/posts/postSlice";
+import { useDispatch } from "react-redux";
+import { editPost, getAllPosts } from "../features/posts/postSlice";
 
-export const CreatePost = () => {
+export const EditPost = ({ setFalse, id, title, description }) => {
   const [postData, setPostData] = useState({
-    title: "",
-    description: "",
+    title: title,
+    description: description,
   });
-  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  const handleSubmit = () => {
-    try {
-      dispatch(
-        createPost({
-          description: postData.description,
-          title: postData.title,
-          user: user.firstName,
-          userId: user.userId,
-        })
-      );
-    } catch (err) {
-      console.log(err);
-    }
-    setPostData({ title: "", description: "" });
-  };
-  
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 absolute bg-slate-600 p-2 rounded-2xl z-10 bottom-4">
+      <i
+        className="fa-solid fa-xmark text-white text-lg text-right cursor-pointer"
+        onClick={setFalse}
+      ></i>
       <input
         type="text"
         className="border-black border-2 p-2 rounded-lg"
@@ -51,9 +38,13 @@ export const CreatePost = () => {
       <button
         type="button"
         className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        onClick={handleSubmit}
+        onClick={() => {
+          dispatch(editPost({ postData, id }));
+          setFalse();
+          dispatch(getAllPosts());
+        }}
       >
-        Post
+        Edit
       </button>
     </div>
   );
