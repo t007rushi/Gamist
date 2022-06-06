@@ -31,7 +31,7 @@ const initialState = {
   signInStatus: "idle",
   signOutStatus: "idle",
   getUserStatus: "idle",
-  // updateUserDetailsStatus:"idle",
+  updateUserDetailsStatus:"idle",
   UserDetailsStatus:"idle",
 };
 
@@ -55,15 +55,17 @@ export const SignIn = createAsyncThunk(
 export const handleGLogin = createAsyncThunk("auth/GoogleSignIn", async () => {
   const Gprovider = new GoogleAuthProvider();
   try {
-    const userdata = { firstName: "", email: "", userId: "" };
+    const userdata = { firstName: "", email: "", userId: "",portfolioLink:null };
     await signInWithPopup(auth, Gprovider).then((userCred) => {
       userdata.firstName = userCred.user.displayName;
       userdata.email = userCred.user.email;
       userdata.userId = userCred.user.uid;
+      userdata.portfolioLink =""
       setDoc(doc(database, "users", userCred.user.uid), {
         firstName: userCred.user.displayName,
         email: userCred.user.email,
         userId: userCred.user.uid,
+        portfolioLink:null,
       });
     });
     return userdata;
@@ -108,6 +110,7 @@ export const SignUp = createAsyncThunk(
         lastName,
         email,
         userId: data.user.uid,
+        portfolioLink:null,
       });
       return {
         firstName,
@@ -141,7 +144,6 @@ export const getAllUsers = createAsyncThunk(
       const userstate = getState();
       const user = userstate.auth.user;
       const userRef = collection(database, "users");
-
       const userQuery = query(userRef, where("email", "!=", user.email));
       const userquerySnapshot = await getDocs(userQuery);
       const users = userquerySnapshot.docs.map((userdocument) => ({
@@ -162,11 +164,10 @@ export const updateUserDetails = createAsyncThunk(
   "auth/updateUserDetails",
   async (userData, { getState }) => {
     const userstate = getState();
-    const userId = userstate.auth.user.id;
-
+    const userId = userstate.auth.user.userId;
     try {
       const userRef = doc(database, "users", userId);
-      await updateDoc(userRef, userData);
+      await updateDoc(userRef, {...userData});
       const newUserData = await getDoc(userRef);
       return newUserData.data();
     } catch (error) {
@@ -244,17 +245,6 @@ const authSlice = createSlice({
     [SignOut.fulfilled]: (state, action) => {
       state.isLoggedIn = false;
       state.signOutStatus = "succeed";
-    },
-    [getAllUsers.pending]: (state, action) => {
-      state.getUserStatus = "pending";
-    },
-    [getAllUsers.fulfilled]: (state, action) => {
-      state.users = action.payload;
-      state.getUserStatus = "succeed";
-    },
-    [getAllUsers.rejected]: (state, action) => {
-      state.error = action.error.message;
-      state.getUserStatus = "failed";
     },
     [getAllUsers.pending]: (state, action) => {
       state.getUserStatus = "pending";
