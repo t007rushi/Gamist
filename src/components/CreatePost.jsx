@@ -14,10 +14,10 @@ export const CreatePost = () => {
     try {
       dispatch(
         createPost({
-          description: postData.description,
-          title: postData.title,
-          user: user.firstName,
-          userId: user.userId,
+          description: postData?.description,
+          title: postData?.title,
+          firstName: user?.firstName,
+          userId: user?.userId,
         })
       );
     } catch (err) {
@@ -25,7 +25,7 @@ export const CreatePost = () => {
     }
     setPostData({ title: "", description: "" });
   };
-  
+
   return (
     <div className="flex flex-col gap-4">
       <input
