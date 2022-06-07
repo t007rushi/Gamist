@@ -9,7 +9,7 @@ import {
 } from "../../../features/auth/authSlice";
 
 export const Login = () => {
-  const [logdata, setLogData] = useState({ email: "", password: "" });
+  const [logdata, setLogData] = useState({ email: "sam@test.com", password: "sam@test" });
   const dispatch = useDispatch();
 
   //login
@@ -46,6 +46,7 @@ export const Login = () => {
           Email
           <input
             type="email"
+            value={logdata.email}
             placeholder="Enter the Email"
             className="bg-slate-900 rounded-md p-1 w-72"
             onChange={(e) => setLogData({ ...logdata, email: e.target.value })}
@@ -58,6 +59,7 @@ export const Login = () => {
           Password
           <input
             type="password"
+            value={logdata.password}
             placeholder="Enter password"
             className="bg-slate-900 rounded-md p-1 w-72"
             onChange={(e) =>
