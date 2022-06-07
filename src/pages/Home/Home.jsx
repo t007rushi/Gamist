@@ -17,20 +17,18 @@ export const Home = () => {
   }, []);
   return (
     <div className="flex justify-center gap-4 text-gray-900 mt-20">
-      {/* POSTS FEED */}
       <div className="posts">
-        {/* CREATE POST */}
         <div className="create-post">
           <CreatePost />
         </div>
-        {/* Others Posts to read */}
         <div className="posts-column flex flex-col-reverse gap-4">
           {posts.map((post) => {
-            return <PostCard {...post} key={post.id} />;
+            return (
+              <PostCard {...post} postUser={post.firstName} key={post.postId} />
+            );
           })}
         </div>
       </div>
-      {/* Suggetsions  */}
       <div className="suggestions hidden sm:block">
         <div className="p-2 max-w-md bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700 sticky top-14 mt-2">
           <div className="flex justify-between items-center mb-4 gap-1">
@@ -49,10 +47,10 @@ export const Home = () => {
                   <div className="flex items-center space-x-4">
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                        {user.firstName}
+                        {user?.firstName}
                       </p>
                       <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                        {user.email}
+                        {user?.email}
                       </p>
                     </div>
                     <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white cursor-pointer border-2 rounded-lg p-1">

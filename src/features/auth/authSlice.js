@@ -18,6 +18,8 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 
 import { app, database } from "../../firbaseConfig";
@@ -31,8 +33,9 @@ const initialState = {
   signInStatus: "idle",
   signOutStatus: "idle",
   getUserStatus: "idle",
-  updateUserDetailsStatus:"idle",
-  UserDetailsStatus:"idle",
+  updateUserDetailsStatus: "idle",
+  UserDetailsStatus: "idle",
+  BookmarkStatus: "idle",
 };
 
 //signin
@@ -54,18 +57,25 @@ export const SignIn = createAsyncThunk(
 //google auth
 export const handleGLogin = createAsyncThunk("auth/GoogleSignIn", async () => {
   const Gprovider = new GoogleAuthProvider();
+
   try {
-    const userdata = { firstName: "", email: "", userId: "",portfolioLink:null };
+    const userdata = {
+      firstName: "",
+      email: "",
+      userId: "",
+      portfolioLink: null,
+    };
     await signInWithPopup(auth, Gprovider).then((userCred) => {
       userdata.firstName = userCred.user.displayName;
       userdata.email = userCred.user.email;
       userdata.userId = userCred.user.uid;
-      userdata.portfolioLink =""
+      userdata.portfolioLink = "";
       setDoc(doc(database, "users", userCred.user.uid), {
         firstName: userCred.user.displayName,
         email: userCred.user.email,
         userId: userCred.user.uid,
-        portfolioLink:null,
+        portfolioLink: null,
+        bookmarks: [],
       });
     });
     return userdata;
@@ -110,7 +120,7 @@ export const SignUp = createAsyncThunk(
         lastName,
         email,
         userId: data.user.uid,
-        portfolioLink:null,
+        portfolioLink: null,
       });
       return {
         firstName,
@@ -158,7 +168,6 @@ export const getAllUsers = createAsyncThunk(
   }
 );
 
-
 //updateUserDetails
 export const updateUserDetails = createAsyncThunk(
   "auth/updateUserDetails",
@@ -167,9 +176,47 @@ export const updateUserDetails = createAsyncThunk(
     const userId = userstate.auth.user.userId;
     try {
       const userRef = doc(database, "users", userId);
-      await updateDoc(userRef, {...userData});
+      await updateDoc(userRef, { ...userData });
       const newUserData = await getDoc(userRef);
       return newUserData.data();
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  }
+);
+
+//add a bookmark
+export const addBookmark = createAsyncThunk(
+  "bookmark/addBookmark",
+  async (postId, { getState }) => {
+    const userState = getState();
+    const uId = userState.auth.user.userId;
+    try {
+      const postDocumentRef = doc(database, "users", uId);
+      await updateDoc(postDocumentRef, {
+        bookmarks: arrayUnion(postId),
+      });
+      return { PostId: postId, userId: uId };
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  }
+);
+
+//delete a bookmark
+export const removeBookmark = createAsyncThunk(
+  "bookmark/removeBookmark",
+  async (postId, { getState }) => {
+    const userState = getState();
+    const uId = userState.auth.user.userId;
+    try {
+      const postDocumentRef = doc(database, "users", uId);
+      await updateDoc(postDocumentRef, {
+        bookmarks: arrayRemove(postId),
+      });
+      return { PostId: postId, userId: uId };
     } catch (error) {
       console.error(error);
       return Promise.reject(error);
@@ -266,6 +313,30 @@ const authSlice = createSlice({
     },
     [updateUserDetails.rejected]: (state, action) => {
       state.updateUserDetailsStatus = "failed";
+    },
+
+    [addBookmark.pending]: (state, action) => {
+      state.BookmarkStatus = "pending";
+    },
+    [addBookmark.fulfilled]: (state, action) => {
+      state.user.bookmarks = [...state.user.bookmarks, action.payload.PostId];
+      state.BookmarkStatus = "succeed";
+    },
+    [addBookmark.rejected]: (state, action) => {
+      state.BookmarkStatus = "failed";
+    },
+
+    [removeBookmark.pending]: (state, action) => {
+      state.BookmarkStatus = "pending";
+    },
+    [removeBookmark.fulfilled]: (state, action) => {
+      state.user.bookmarks = state.user.bookmarks.filter(
+        (bm) => bm !== action.payload.PostId
+      );
+      state.BookmarkStatus = "succeed";
+    },
+    [removeBookmark.rejected]: (state, action) => {
+      state.BookmarkStatus = "failed";
     },
   },
 });

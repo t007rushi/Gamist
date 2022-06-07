@@ -70,10 +70,12 @@ export const Profile = () => {
             alt="profile"
           />
           <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-            {user.firstName}
+            {user?.firstName}
           </h5>
           <span className="text-sm text-gray-900 dark:text-gray-400">
-            {user.portfolioLink === null?"add a portfolio link by clicking Edit":user.portfolioLink}
+            {user.portfolioLink === null
+              ? "add a portfolio link by clicking Edit"
+              : user.portfolioLink}
           </span>
           <div className="flex gap-4 mt-4">
             <span className="text-lg text-gray-800 dark:text-gray-400">
@@ -87,15 +89,15 @@ export const Profile = () => {
             </span>
           </div>
         </div>
-        <div class="border-b border-gray-200 dark:border-gray-700">
-          <ul class="flex flex-wrap justify-evenly -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-            <li class="mr-2">
+        <div className="border-b border-gray-200 dark:border-gray-700">
+          <ul className="flex flex-wrap justify-evenly -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+            <li className="mr-2">
               <button
-                class="inline-flex p-4 text-blue-600 rounded-t-lg border-b-2 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group"
+                className="inline-flex p-4 text-blue-600 rounded-t-lg border-b-2 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group"
                 aria-current="page"
               >
                 <svg
-                  class="mr-2 w-5 h-5 text-blue-600 dark:text-blue-500"
+                  className="mr-2 w-5 h-5 text-blue-600 dark:text-blue-500"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -105,10 +107,10 @@ export const Profile = () => {
                 Posts
               </button>
             </li>
-            <li class="mr-2">
-              <button class="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+            <li className="mr-2">
+              <button className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
                 <svg
-                  class="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
+                  className="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -118,10 +120,10 @@ export const Profile = () => {
                 Bookmark
               </button>
             </li>
-            <li class="mr-2">
-              <button class="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+            <li className="mr-2">
+              <button className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
                 <svg
-                  class="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
+                  className="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -136,13 +138,15 @@ export const Profile = () => {
       </div>
       <div className="flex flex-col-reverse gap-4 w-96">
         {userPosts?.map((post) => {
-          return <PostCard {...post} key={post.id} />;
+          return (
+            <PostCard {...post} postUser={post.firstName} key={post.postId} />
+          );
         })}
       </div>
       {editProfile && (
         <EditProfile
           closeEdit={() => setEditProfile(false)}
-          name={user.firstName}
+          name={user?.firstName}
           portfolioLink={user.portfolioLink}
         />
       )}

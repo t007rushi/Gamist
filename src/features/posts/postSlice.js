@@ -7,6 +7,8 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
+  arrayRemove,
+  arrayUnion,
 } from "firebase/firestore";
 import { database } from "../../firbaseConfig";
 
@@ -26,6 +28,7 @@ export const createPost = createAsyncThunk(
     try {
       const postRef = await addDoc(collection(database, "posts"), {
         ...postData,
+        likes: [],
       });
       await updateDoc(postRef, { postId: postRef.id });
       const postSnap = await getDoc(postRef);
@@ -85,6 +88,46 @@ export const getAllPosts = createAsyncThunk("post/getAllPosts", async () => {
   }
 });
 
+//likes a post
+export const likedUserPost = createAsyncThunk(
+  "post/likedUserPost",
+  async (postId, { getState }) => {
+    const userState = getState();
+    const userData = userState.auth.user;
+
+    try {
+      const postDocumentRef = doc(database, "posts", postId);
+      await updateDoc(postDocumentRef, {
+        likes: arrayUnion(userData.userId),
+      });
+      return { PostId: postId, userId: userData.userId };
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  }
+);
+
+//unlike post
+export const unLikedUserPost = createAsyncThunk(
+  "post/unLikedUserPost",
+  async (postId, { getState }) => {
+    const userState = getState();
+    const userData = userState.auth.user;
+    try {
+      const postDocumentRef = doc(database, "posts", postId);
+      await updateDoc(postDocumentRef, {
+        likes: arrayRemove(userData.userId),
+      });
+
+      return { PostId: postId, userId: userData.userId, isLiked: false };
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "post",
   initialState,
@@ -137,6 +180,32 @@ const postSlice = createSlice({
     },
     [deletePost.pending]: (state, action) => {
       state.statusDeletePost = "pending";
+    },
+
+    [likedUserPost.fulfilled]: (state, action) => {
+      state.posts = state.posts.map((post) =>
+        post.postId === action.payload.PostId
+          ? { ...post, likes: [...post.likes, action.payload.userId] }
+          : post
+      );
+      state.LikePostStatus = "succeed";
+    },
+    [likedUserPost.pending]: (state, action) => {
+      state.LikePostStatus = "pending";
+    },
+    [unLikedUserPost.fulfilled]: (state, action) => {
+      state.posts = state.posts.map((post) =>
+        post.postId === action.payload.PostId
+          ? {
+              ...post,
+              likes: post.likes.filter((id) => id !== action.payload.userId),
+            }
+          : post
+      );
+      state.unlikePostStatus = "succeed";
+    },
+    [unLikedUserPost.pending]: (state, action) => {
+      state.unlikePostStatus = "pending";
     },
   },
 });
