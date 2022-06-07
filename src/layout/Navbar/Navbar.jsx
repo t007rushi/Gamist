@@ -41,7 +41,7 @@ export const Navbar = () => {
           <Link to="/bookmarks" title="bookmark" className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-bookmark"></i>
           </Link>
-          <Link title="message" className="p-2 m-2 text-2xl">
+          <Link to="/" title="message" className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-message"></i>
           </Link>
           <Link to="/home" className="p-2 m-2 text-2xl">
