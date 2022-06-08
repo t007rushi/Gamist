@@ -2,11 +2,17 @@ import React, { useState, useRef } from "react";
 import { useOnClickOutside } from "../hooks/onClickOutside";
 import { useDispatch, useSelector } from "react-redux";
 import { EditPost } from "./EditPost";
-import { deletePost, getAllPosts } from "../features/posts/postSlice";
+import {
+  deletePost,
+  getAllPosts,
+  likedUserPost,
+  unLikedUserPost,
+} from "../features/posts/postSlice";
+import { addBookmark, removeBookmark } from "../features/auth/authSlice";
 
-export const PostCard = ({ user, title, description, postId }) => {
+export const PostCard = ({ postUser, title, description, postId, likes }) => {
   const {
-    user: { firstName },
+    user: { firstName, userId, bookmarks },
   } = useSelector((state) => state.auth);
   const [postModal, setPostModal] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -19,9 +25,9 @@ export const PostCard = ({ user, title, description, postId }) => {
       <div className="flex justify-between text-gray-900 border-b relative">
         <div className="flex items-center user">
           <i className="fa-solid fa-user p-2 m-1 rounded-2xl border border-slate-900"></i>
-          <p>{user}</p>
+          <p>{postUser}</p>
         </div>
-        {firstName === user && (
+        {firstName === postUser && (
           <div
             className="text-2xl cursor-pointer"
             onClick={() => setPostModal((prev) => !prev)}
@@ -66,11 +72,36 @@ export const PostCard = ({ user, title, description, postId }) => {
       </p>
       {/*  */}
       <div className="flex justify-around align-center gap-4">
-        <i className="fa-regular fa-heart cursor-pointer"></i>
-        <i className="fa-regular fa-comment cursor-pointer"></i>
-        <i className="fa-solid fa-share cursor-pointer"></i>
-        <i className="fa-regular fa-bookmark cursor-pointer"></i>
+        {!likes?.includes(userId) ? (
+          <i
+            className="fa-regular fa-heart cursor-pointer text-black"
+            onClick={() => dispatch(likedUserPost(postId))}
+          >
+            {likes?.length}
+          </i>
+        ) : (
+          <i
+            className="fa-solid fa-heart cursor-pointer text-black"
+            onClick={() => dispatch(unLikedUserPost(postId))}
+          >
+            {likes?.length}
+          </i>
+        )}
+        <i className="fa-regular fa-comment cursor-pointer text-black"></i>
+        <i className="fa-solid fa-share cursor-pointer text-black"></i>
+        {!bookmarks?.includes(postId) ? (
+          <i
+            className="fa-regular fa-bookmark cursor-pointer text-black"
+            onClick={() => dispatch(addBookmark(postId))}
+          ></i>
+        ) : (
+          <i
+            className="fa-solid fa-bookmark cursor-pointer text-black"
+            onClick={() => dispatch(removeBookmark(postId))}
+          ></i>
+        )}
       </div>
+
       {edit && (
         <EditPost
           setFalse={() => setEdit(false)}

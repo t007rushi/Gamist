@@ -18,22 +18,24 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 
 import { app, database } from "../../firbaseConfig";
 const auth = getAuth();
 const initialState = {
-  username: null,
-  email: null,
   isLoggedIn: false,
   user: {},
-  otherUserDetails: {},
   users: [],
   error: null,
   signUpStatus: "idle",
   signInStatus: "idle",
   signOutStatus: "idle",
   getUserStatus: "idle",
+  updateUserDetailsStatus: "idle",
+  UserDetailsStatus: "idle",
+  BookmarkStatus: "idle",
 };
 
 //signin
@@ -55,16 +57,25 @@ export const SignIn = createAsyncThunk(
 //google auth
 export const handleGLogin = createAsyncThunk("auth/GoogleSignIn", async () => {
   const Gprovider = new GoogleAuthProvider();
+
   try {
-    const userdata = { firstName: "", email: "", userId: "" };
+    const userdata = {
+      firstName: "",
+      email: "",
+      userId: "",
+      portfolioLink: null,
+    };
     await signInWithPopup(auth, Gprovider).then((userCred) => {
       userdata.firstName = userCred.user.displayName;
       userdata.email = userCred.user.email;
       userdata.userId = userCred.user.uid;
+      userdata.portfolioLink = "";
       setDoc(doc(database, "users", userCred.user.uid), {
         firstName: userCred.user.displayName,
         email: userCred.user.email,
         userId: userCred.user.uid,
+        portfolioLink: null,
+        bookmarks: [],
       });
     });
     return userdata;
@@ -109,6 +120,7 @@ export const SignUp = createAsyncThunk(
         lastName,
         email,
         userId: data.user.uid,
+        portfolioLink: null,
       });
       return {
         firstName,
@@ -142,7 +154,6 @@ export const getAllUsers = createAsyncThunk(
       const userstate = getState();
       const user = userstate.auth.user;
       const userRef = collection(database, "users");
-
       const userQuery = query(userRef, where("email", "!=", user.email));
       const userquerySnapshot = await getDocs(userQuery);
       const users = userquerySnapshot.docs.map((userdocument) => ({
@@ -157,14 +168,17 @@ export const getAllUsers = createAsyncThunk(
   }
 );
 
-//getUserProfile
-export const getUserProfileDetails = createAsyncThunk(
-  "auth/getUserProfileDetails",
-  async (userId) => {
+//updateUserDetails
+export const updateUserDetails = createAsyncThunk(
+  "auth/updateUserDetails",
+  async (userData, { getState }) => {
+    const userstate = getState();
+    const userId = userstate.auth.user.userId;
     try {
       const userRef = doc(database, "users", userId);
-      const userData = await getDoc(userRef);
-      return userData.data();
+      await updateDoc(userRef, { ...userData });
+      const newUserData = await getDoc(userRef);
+      return newUserData.data();
     } catch (error) {
       console.error(error);
       return Promise.reject(error);
@@ -172,18 +186,37 @@ export const getUserProfileDetails = createAsyncThunk(
   }
 );
 
-//updateUserDetails
-export const updateUserDetails = createAsyncThunk(
-  "auth/updateUserDetails",
-  async (userData, { getState }) => {
-    const userstate = getState();
-    const userId = userstate.auth.user.id;
-
+//add a bookmark
+export const addBookmark = createAsyncThunk(
+  "bookmark/addBookmark",
+  async (postId, { getState }) => {
+    const userState = getState();
+    const uId = userState.auth.user.userId;
     try {
-      const userRef = doc(database, "users", userId);
-      await updateDoc(userRef, userData);
-      const newUserData = await getDoc(userRef);
-      return newUserData.data();
+      const postDocumentRef = doc(database, "users", uId);
+      await updateDoc(postDocumentRef, {
+        bookmarks: arrayUnion(postId),
+      });
+      return { PostId: postId, userId: uId };
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  }
+);
+
+//delete a bookmark
+export const removeBookmark = createAsyncThunk(
+  "bookmark/removeBookmark",
+  async (postId, { getState }) => {
+    const userState = getState();
+    const uId = userState.auth.user.userId;
+    try {
+      const postDocumentRef = doc(database, "users", uId);
+      await updateDoc(postDocumentRef, {
+        bookmarks: arrayRemove(postId),
+      });
+      return { PostId: postId, userId: uId };
     } catch (error) {
       console.error(error);
       return Promise.reject(error);
@@ -271,16 +304,39 @@ const authSlice = createSlice({
       state.error = action.error.message;
       state.getUserStatus = "failed";
     },
-    [getAllUsers.pending]: (state, action) => {
-      state.getUserStatus = "pending";
+    [updateUserDetails.pending]: (state, action) => {
+      state.updateUserDetailsStatus = "pending";
     },
-    [getAllUsers.fulfilled]: (state, action) => {
-      state.users = action.payload;
-      state.getUserStatus = "succeed";
+    [updateUserDetails.fulfilled]: (state, action) => {
+      state.user = action.payload;
+      state.updateUserDetailsStatus = "succeed";
     },
-    [getAllUsers.rejected]: (state, action) => {
-      state.error = action.error.message;
-      state.getUserStatus = "failed";
+    [updateUserDetails.rejected]: (state, action) => {
+      state.updateUserDetailsStatus = "failed";
+    },
+
+    [addBookmark.pending]: (state, action) => {
+      state.BookmarkStatus = "pending";
+    },
+    [addBookmark.fulfilled]: (state, action) => {
+      state.user.bookmarks = [...state.user.bookmarks, action.payload.PostId];
+      state.BookmarkStatus = "succeed";
+    },
+    [addBookmark.rejected]: (state, action) => {
+      state.BookmarkStatus = "failed";
+    },
+
+    [removeBookmark.pending]: (state, action) => {
+      state.BookmarkStatus = "pending";
+    },
+    [removeBookmark.fulfilled]: (state, action) => {
+      state.user.bookmarks = state.user.bookmarks.filter(
+        (bm) => bm !== action.payload.PostId
+      );
+      state.BookmarkStatus = "succeed";
+    },
+    [removeBookmark.rejected]: (state, action) => {
+      state.BookmarkStatus = "failed";
     },
   },
 });

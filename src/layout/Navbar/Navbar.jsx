@@ -35,18 +35,18 @@ export const Navbar = () => {
       <h1 className="font-bold text-2xl">GAMIST</h1>
       {isLoggedIn && (
         <div className="flex items-center">
-          <button
-            className="p-2 m-2 text-2xl"
-            onClick={() => navigate("/home")}
-          >
+          <Link to="/home" className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-house"></i>
-          </button>
-          <button title="message" className="p-2 m-2 text-2xl">
+          </Link>
+          <Link to="/bookmarks" title="bookmark" className="p-2 m-2 text-2xl">
+            <i className="fa-solid fa-bookmark"></i>
+          </Link>
+          <Link to="/" title="message" className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-message"></i>
-          </button>
-          <button className="p-2 m-2 text-2xl">
+          </Link>
+          <Link to="/home" className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-square-plus"></i>
-          </button>
+          </Link>
           <Link to="/profile" className=" p-2 text-2xl">
             <i className="fa-solid fa-user"></i>
           </Link>
