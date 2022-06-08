@@ -108,15 +108,9 @@ export const Profile = () => {
               </button>
             </li>
             <li className="mr-2">
+              <i className="fa-solid fa-bookmark"></i>
               <button className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                <i className="fa-solid fa-bookmark"></i>
                 Bookmark
-              </button>
-            </li>
-            <li className="mr-2">
-              <button className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                <i className="fa-solid fa-person-running"></i>
-                Followers
               </button>
             </li>
           </ul>
