@@ -14,7 +14,7 @@ import { database } from "../../firbaseConfig";
 
 export const initialState = {
   posts: [],
-  comments:[],
+  comments: [],
   statusAddPost: "idle",
   statusEditPost: "idle",
   statusDeletePost: "idle",
@@ -30,6 +30,7 @@ export const createPost = createAsyncThunk(
       const postRef = await addDoc(collection(database, "posts"), {
         ...postData,
         likes: [],
+        createdAt: Date.now(),
       });
       await updateDoc(postRef, { postId: postRef.id });
       const postSnap = await getDoc(postRef);
@@ -166,20 +167,22 @@ export const deleteComments = createAsyncThunk(
   }
 );
 
-
 //get all comments
-export const getAllComments = createAsyncThunk("post/getAllComments", async () => {
-  try {
-    const allcommentsSnap = await getDocs(collection(database, "comments"));
-    const allcomments = allcommentsSnap.docs.map((postdocument) =>
-      postdocument.data()
-    );
-    return allcomments;
-  } catch (error) {
-    console.error(error);
-    return Promise.reject(error);
+export const getAllComments = createAsyncThunk(
+  "post/getAllComments",
+  async () => {
+    try {
+      const allcommentsSnap = await getDocs(collection(database, "comments"));
+      const allcomments = allcommentsSnap.docs.map((postdocument) =>
+        postdocument.data()
+      );
+      return allcomments;
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
   }
-});
+);
 
 const postSlice = createSlice({
   name: "post",
