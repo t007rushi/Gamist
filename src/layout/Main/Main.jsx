@@ -1,8 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { Home, Login, Profile, Signup } from "../../pages";
-import { NotFoundPage } from "../../pages/404Page/NotFoundPage";
-import { Bookmark } from "../../pages/Bookmark/Bookmark";
+import { Home, Login, Profile, Signup ,NotFoundPage,Bookmark ,Explore } from "../../pages";
 
 export const Main = () => {
   return (
@@ -13,6 +11,7 @@ export const Main = () => {
         <Route path="/home" element={<Home />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/bookmarks" element={<Bookmark />}></Route>
+        <Route path="/explore" element={<Explore />}></Route>
         <Route path="/*" element={<NotFoundPage />}></Route>
       </Routes>
     </div>

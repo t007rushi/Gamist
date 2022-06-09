@@ -1,8 +1,7 @@
 import React, { useRef, useState } from "react";
-import { useOnClickOutside } from "../hooks/onClickOutside";
+import { useOnClickOutside } from "../../hooks/onClickOutside";
 import { useSelector } from "react-redux";
-import { PostCard } from "../components/PostCard";
-import { EditProfile } from "../components/EditProfile";
+import { PostCard, EditProfile } from "../../components/index";
 
 export const Profile = () => {
   const [options, setOptions] = useState(false);
@@ -82,10 +81,10 @@ export const Profile = () => {
               {userPosts?.length} Posts
             </span>
             <span className="text-lg text-gray-800 dark:text-gray-400">
-              {user?.followers.length} Followers
+              {user?.followers?.length} Followers
             </span>
             <span className="text-lg text-gray-800 dark:text-gray-400">
-              {user?.following.length} Following
+              {user?.following?.length} Following
             </span>
           </div>
         </div>
@@ -107,16 +106,10 @@ export const Profile = () => {
                 Posts
               </button>
             </li>
-            <li className="mr-2">
-              <i className="fa-solid fa-bookmark"></i>
-              <button className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                Bookmark
-              </button>
-            </li>
           </ul>
         </div>
       </div>
-      <div className="flex flex-col-reverse gap-4 w-96 mb-8">
+      <div className="flex flex-col-reverse gap-4 w-72 mb-8">
         {userPosts?.map((post) => {
           return (
             <PostCard {...post} postUser={post.firstName} key={post.postId} />
