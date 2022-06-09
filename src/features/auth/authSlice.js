@@ -389,7 +389,6 @@ const authSlice = createSlice({
       state.BookmarkStatus = "failed";
     },
     [followUser.fulfilled]: (state, action) => {
-      console.log(action.payload.followuserId)
       state.user.following = state.user.following.concat(
         action.payload.followuserId
       );

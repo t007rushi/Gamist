@@ -10,7 +10,7 @@ export const EditPost = ({ setFalse, id, title, description }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex flex-col gap-4 absolute bg-slate-600 p-2 rounded-2xl z-10 bottom-4">
+    <div className="flex flex-col gap-4 absolute bg-slate-600 p-2 rounded-2xl z-10 bottom-1 right-1 w-72">
       <i
         className="fa-solid fa-xmark text-white text-lg text-right cursor-pointer"
         onClick={setFalse}
