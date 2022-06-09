@@ -14,6 +14,7 @@ import { database } from "../../firbaseConfig";
 
 export const initialState = {
   posts: [],
+  comments:[],
   statusAddPost: "idle",
   statusEditPost: "idle",
   statusDeletePost: "idle",
@@ -128,6 +129,58 @@ export const unLikedUserPost = createAsyncThunk(
   }
 );
 
+//add a comment
+export const addComments = createAsyncThunk(
+  "post/addComments",
+  async ({ postId, comment }, { getState }) => {
+    const userState = getState();
+    const userData = userState.auth.user;
+    try {
+      const postscommentRef = await addDoc(collection(database, "comments"), {
+        comment,
+        postId,
+        userData,
+      });
+      updateDoc(postscommentRef, { id: postscommentRef.id });
+      const postSnapData = await getDoc(postscommentRef);
+      return { ...postSnapData.data(), id: postSnapData.id };
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  }
+);
+
+//delete a comment
+export const deleteComments = createAsyncThunk(
+  "post/deleteComments",
+  async (commentId) => {
+    const commentRef = doc(database, "comments", commentId);
+    try {
+      await deleteDoc(commentRef);
+      return commentRef.id;
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  }
+);
+
+
+//get all comments
+export const getAllComments = createAsyncThunk("post/getAllComments", async () => {
+  try {
+    const allcommentsSnap = await getDocs(collection(database, "comments"));
+    const allcomments = allcommentsSnap.docs.map((postdocument) =>
+      postdocument.data()
+    );
+    return allcomments;
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+});
+
 const postSlice = createSlice({
   name: "post",
   initialState,
@@ -206,6 +259,17 @@ const postSlice = createSlice({
     },
     [unLikedUserPost.pending]: (state, action) => {
       state.unlikePostStatus = "pending";
+    },
+    [addComments.fulfilled]: (state, action) => {
+      state.comments = state.comments.concat(action.payload);
+    },
+    [getAllComments.fulfilled]: (state, action) => {
+      state.comments = action.payload;
+    },
+    [deleteComments.fulfilled]: (state, action) => {
+      state.comments = state.comments.filter(
+        (comment) => comment.id !== action.payload
+      );
     },
   },
 });

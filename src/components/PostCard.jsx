@@ -3,6 +3,8 @@ import { useOnClickOutside } from "../hooks/onClickOutside";
 import { useDispatch, useSelector } from "react-redux";
 import { EditPost } from "./EditPost";
 import {
+  addComments,
+  deleteComments,
   deletePost,
   getAllPosts,
   likedUserPost,
@@ -14,11 +16,14 @@ export const PostCard = ({ postUser, title, description, postId, likes }) => {
   const {
     user: { firstName, userId, bookmarks },
   } = useSelector((state) => state.auth);
+  const { comments } = useSelector((state) => state.posts);
   const [postModal, setPostModal] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [comment, setComment] = useState("");
   const optionref = useRef();
   const dispatch = useDispatch();
   useOnClickOutside(optionref, () => setPostModal(false));
+  const currentPostcomments = comments.filter((com) => com.postId === postId);
 
   return (
     <div className="p-2 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 relative">
@@ -110,6 +115,47 @@ export const PostCard = ({ postUser, title, description, postId, likes }) => {
           description={description}
         />
       )}
+      <div className="pt-4">
+        {currentPostcomments?.splice(0, 3).map((comnt) => {
+          return (
+            <div className="flex justify-between items-center" key={comnt.id}>
+              <span className="text-black">
+                <span className="font-2xl font-bold">
+                  {comnt.userData.firstName}
+                </span>
+                {" " + comnt.comment}
+              </span>
+              {comnt.userData.firstName === firstName && (
+                <i
+                  className="fa-solid fa-trash cursor-pointer text-black"
+                  onClick={() => dispatch(deleteComments(comnt.id))}
+                ></i>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="flex justify-between border-gray-400 border-t mt-2 gap-1">
+        <textarea
+          type="text"
+          rows="1"
+          value={comment}
+          className="outline-none text-gray-800 w-full p-0 overflow-x-hidden"
+          placeholder="Add a comment..."
+          onChange={(e) => setComment(e.target.value)}
+        />
+        {comment.length !== 0 && (
+          <button
+            className="text-blue-700"
+            onClick={() => {
+              dispatch(addComments({ postId, comment }));
+              setComment("");
+            }}
+          >
+            Post
+          </button>
+        )}
+      </div>
     </div>
   );
 };

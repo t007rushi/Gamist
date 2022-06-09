@@ -1,14 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
-import { app } from "../../firbaseConfig";
-import { signOut, getAuth } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SignOut } from "../../features/auth/authSlice";
 
 export const Navbar = () => {
-  const auth = getAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
@@ -16,7 +13,7 @@ export const Navbar = () => {
   const signmeout = (e) => {
     e.preventDefault();
     try {
-      const userdata = dispatch(SignOut());
+      dispatch(SignOut());
     } catch (error) {
       console.log(error.message);
     }
@@ -40,9 +37,6 @@ export const Navbar = () => {
           </Link>
           <Link to="/bookmarks" title="bookmark" className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-bookmark"></i>
-          </Link>
-          <Link to="/" title="message" className="p-2 m-2 text-2xl">
-            <i className="fa-solid fa-message"></i>
           </Link>
           <Link to="/home" className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-square-plus"></i>

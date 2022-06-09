@@ -14,7 +14,7 @@ export const Profile = () => {
   const userPosts = posts.filter((post) => post.userId === user.userId);
 
   return (
-    <div className="flex flex-col justify-center items-center gap-2 relative">
+    <div className="flex flex-col justify-center items-center gap-2 relative mt-20">
       <div className="w-96 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 mt-2">
         <div className="flex justify-end px-4 pt-4">
           <button
@@ -82,10 +82,10 @@ export const Profile = () => {
               {userPosts?.length} Posts
             </span>
             <span className="text-lg text-gray-800 dark:text-gray-400">
-              100 Followers
+              {user?.followers.length} Followers
             </span>
             <span className="text-lg text-gray-800 dark:text-gray-400">
-              100 Following
+              {user?.following.length} Following
             </span>
           </div>
         </div>
@@ -108,35 +108,15 @@ export const Profile = () => {
               </button>
             </li>
             <li className="mr-2">
+              <i className="fa-solid fa-bookmark"></i>
               <button className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                <svg
-                  className="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path>
-                </svg>
                 Bookmark
-              </button>
-            </li>
-            <li className="mr-2">
-              <button className="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                <svg
-                  className="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path>
-                </svg>
-                Followers
               </button>
             </li>
           </ul>
         </div>
       </div>
-      <div className="flex flex-col-reverse gap-4 w-96">
+      <div className="flex flex-col-reverse gap-4 w-96 mb-8">
         {userPosts?.map((post) => {
           return (
             <PostCard {...post} postUser={post.firstName} key={post.postId} />

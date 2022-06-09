@@ -121,12 +121,16 @@ export const SignUp = createAsyncThunk(
         email,
         userId: data.user.uid,
         portfolioLink: null,
+        followers: [],
+        following: [],
       });
       return {
         firstName,
         lastName,
         email,
         userId: data.user.uid,
+        followers: [],
+        following: [],
       };
     } catch (error) {
       console.error(error);
@@ -217,6 +221,53 @@ export const removeBookmark = createAsyncThunk(
         bookmarks: arrayRemove(postId),
       });
       return { PostId: postId, userId: uId };
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  }
+);
+
+//follow a user
+export const followUser = createAsyncThunk(
+  "auth/followUser",
+  async (followuserId, { getState }) => {
+    const userstate = getState();
+    const currentUserId = userstate.auth.user.userId;
+    try {
+      const userRef = doc(database, "users", currentUserId);
+       await updateDoc(userRef, {
+        following: arrayUnion(followuserId),
+      });
+
+      const followrUserRef = doc(database, "users", followuserId);
+      await updateDoc(followrUserRef, {
+        followers: arrayUnion(currentUserId),
+      });
+      return { followuserId, userId: currentUserId };
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  }
+);
+
+// unfollow a user
+export const unfollowUser = createAsyncThunk(
+  "auth/unfollowUser",
+  async (followuserId, { getState }) => {
+    const userstate = getState();
+    const currentUserId = userstate.auth.user.userId;
+    try {
+      const userDataRef = doc(database, "users", currentUserId);
+      await updateDoc(userDataRef, {
+        following: arrayRemove(followuserId),
+      });
+      const followerUserRef = doc(database, "users", followuserId);
+       await updateDoc(followerUserRef, {
+        followers: arrayRemove(currentUserId),
+      });
+      return { followuserId, userId: currentUserId };
     } catch (error) {
       console.error(error);
       return Promise.reject(error);
@@ -325,7 +376,6 @@ const authSlice = createSlice({
     [addBookmark.rejected]: (state, action) => {
       state.BookmarkStatus = "failed";
     },
-
     [removeBookmark.pending]: (state, action) => {
       state.BookmarkStatus = "pending";
     },
@@ -337,6 +387,35 @@ const authSlice = createSlice({
     },
     [removeBookmark.rejected]: (state, action) => {
       state.BookmarkStatus = "failed";
+    },
+    [followUser.fulfilled]: (state, action) => {
+      console.log(action.payload.followuserId)
+      state.user.following = state.user.following.concat(
+        action.payload.followuserId
+      );
+      state.users = state.users.map((user) =>
+        user.userId === action.payload.followuserId
+          ? { ...user, followers: [user.followers, action.payload.userId] }
+          : user
+      );
+    },
+    [unfollowUser.fulfilled]: (state, action) => {
+      state.user = {
+        ...state.user,
+        following: state.user.following.filter(
+          (id) => id !== action.payload.followuserId
+        ),
+      };
+      state.users = state.users.map((user) =>
+        user.userId === action.payload.followuserId
+          ? {
+              ...user,
+              followers: user.followers.filter(
+                (id) => id !== action.payload.userId
+              ),
+            }
+          : user
+      );
     },
   },
 });
