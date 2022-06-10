@@ -1,25 +1,22 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {
-  handleFLogin,
-  handleGLogin,
-  handleTLogin,
-  SignIn,
-} from "../../../features/auth/authSlice";
+import { SignIn } from "../../../features/auth/authSlice";
 
 export const Login = () => {
-  const [logdata, setLogData] = useState({ email: "sam@test.com", password: "sam@test" });
+  const [logdata, setLogData] = useState({
+    email: "sam@test.com",
+    password: "sam@test",
+  });
   const dispatch = useDispatch();
 
   //login
   const LoginHandler = (e) => {
     e.preventDefault();
     try {
-      const userdata = dispatch(
+      dispatch(
         SignIn({ email: logdata.email, password: logdata.password })
       ).unwrap();
-      console.log(userdata);
     } catch (error) {
       console.log(error.message);
     }
@@ -46,6 +43,7 @@ export const Login = () => {
           Email
           <input
             type="email"
+            autocomplete="on"
             value={logdata.email}
             placeholder="Enter the Email"
             className="bg-slate-900 rounded-md p-1 w-72"
@@ -60,6 +58,7 @@ export const Login = () => {
           <input
             type="password"
             value={logdata.password}
+            autocomplete="on"
             placeholder="Enter password"
             className="bg-slate-900 rounded-md p-1 w-72"
             onChange={(e) =>
@@ -73,25 +72,12 @@ export const Login = () => {
         >
           LOGIN
         </button>
-        <h1>- OR -</h1>
-        <div
-          onClick={() => dispatch(handleGLogin())}
-          className="border-2 border-gray-50 shadow-md hover:text-slate-600 hover:bg-slate-50 cursor-pointer rounded-lg p-1 w-full text-center"
+        <Link
+          to="/signup"
+          className="border-2 text-center text-bold border-gray-50 shadow-md text-slate-600 bg-slate-50 cursor-pointer rounded-lg p-1 w-full font-bold"
         >
-          Log In with Google
-        </div>
-        <div
-          onClick={() => dispatch(handleTLogin())}
-          className="border-2 border-gray-50 shadow-md hover:text-slate-600 hover:bg-slate-50 cursor-pointer rounded-lg p-1 w-full text-center"
-        >
-          Log In with Twitter
-        </div>
-        <div
-          onClick={() => dispatch(handleFLogin())}
-          className="border-2 border-gray-50 shadow-md hover:text-slate-600 hover:bg-slate-50 cursor-pointer rounded-lg p-1 w-full text-center"
-        >
-          Log In with Facebook
-        </div>
+          Create New Account
+        </Link>
       </form>
     </div>
   );

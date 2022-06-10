@@ -41,6 +41,9 @@ export const Navbar = () => {
           <Link to="/home" className="p-2 m-2 text-2xl">
             <i className="fa-solid fa-square-plus"></i>
           </Link>
+          <Link to="/explore" className="p-2 m-2 text-2xl">
+            <i className="fa-solid fa-compass"></i>
+          </Link>
           <Link to="/profile" className=" p-2 text-2xl">
             <i className="fa-solid fa-user"></i>
           </Link>
