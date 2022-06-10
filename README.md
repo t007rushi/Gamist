@@ -48,16 +48,19 @@ Start the server
 ## Functionalities
 
 - User Management
-  -  ADD
-  -  REMOVE
-  -  Increase/Decrease Quantity
-  -  ADD to Wishlist
+ - Follow a user
+ - unfollow a user
+ - show Total following and followers
 - Post Management (CRUD)
   - ADD a Post
   - REMOVE a Post
   - EDIT a Post
   - Update a Post
   - ADD/Remove to/from Bookmark
+- Like & comments
+  - like/unlike a post
+  - comment on particular post 
+  - delete a comment 
 - Filtering and Sorting by date, trending 
 - Frontend Authentication
   - Sign In
