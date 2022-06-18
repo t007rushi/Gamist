@@ -36,8 +36,8 @@ export const Home = () => {
   let filteredPosts = FilterHandler(currentCategory, followingsPosts);
 
   return (
-    <div className="flex justify-center gap-4 text-gray-900 mt-20">
-      <div className="posts">
+    <div className="flex justify-center gap-4 text-gray-900 m-10">
+      <div className="w-full m-4">
         <div className="create-post">
           <CreatePost />
         </div>
@@ -45,7 +45,7 @@ export const Home = () => {
           currentCategory={currentCategory}
           selectCategoryHandler={selectCategoryHandler}
         />
-        <div className="posts-column flex flex-col-reverse gap-4 mb-8">
+        <div className="flex flex-col-reverse gap-4 mb-8">
           {filteredPosts.map((post) => {
             return (
               <PostCard {...post} postUser={post.firstName} key={post.postId} />

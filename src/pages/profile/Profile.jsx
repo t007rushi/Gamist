@@ -13,7 +13,7 @@ export const Profile = () => {
   const userPosts = posts.filter((post) => post.userId === user.userId);
 
   return (
-    <div className="flex flex-col justify-center items-center gap-2 relative mt-20">
+    <div className="flex flex-col justify-center items-center gap-2 relative m-10">
       <div className="w-96 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 mt-2">
         <div className="flex justify-end px-4 pt-4">
           <button
@@ -109,7 +109,7 @@ export const Profile = () => {
           </ul>
         </div>
       </div>
-      <div className="flex flex-col-reverse gap-4 w-72 mb-8">
+      <div className="flex flex-col-reverse gap-4 justify-center mt-4 w-full">
         {userPosts?.map((post) => {
           return (
             <PostCard {...post} postUser={post.firstName} key={post.postId} />

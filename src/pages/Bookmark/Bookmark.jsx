@@ -11,16 +11,14 @@ export const Bookmark = () => {
     bookmarks?.includes(post?.postId)
   );
   return (
-    <div className="mb-8 mt-20">
+    <div className="m-10">
       <h1 className="text-black text-4xl m-4 text-center">My Bookmarks</h1>
-      <div className="flex justify-center">
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-8">
-          {mybookmarked?.map((post) => {
-            return (
-              <PostCard {...post} postUser={post.firstName} key={post.postId} />
-            );
-          })}
-        </div>
+      <div className="flex flex-col gap-4 sm:w-full">
+        {mybookmarked?.map((post) => {
+          return (
+            <PostCard {...post} postUser={post.firstName} key={post.postId} />
+          );
+        })}
       </div>
     </div>
   );

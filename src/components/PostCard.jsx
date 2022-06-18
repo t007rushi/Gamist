@@ -26,7 +26,7 @@ export const PostCard = ({ postUser, title, description, postId, likes }) => {
   const currentPostcomments = comments.filter((com) => com.postId === postId);
 
   return (
-    <div className="p-2 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 relative w-72">
+    <div className="p-2 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 relative w-full">
       <div className="flex justify-between text-gray-900 border-b relative">
         <div className="flex items-center user">
           <i className="fa-solid fa-user p-2 m-1 rounded-2xl border border-slate-900"></i>
