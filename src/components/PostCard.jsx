@@ -78,19 +78,21 @@ export const PostCard = ({ postUser, title, description, postId, likes }) => {
       {/*  */}
       <div className="flex justify-around align-center gap-4">
         {!likes?.includes(userId) ? (
-          <i
-            className="fa-regular fa-heart cursor-pointer text-black"
-            onClick={() => dispatch(likedUserPost(postId))}
-          >
-            {likes?.length}
-          </i>
+          <div className="flex items-center gap-2">
+            <i
+              className="fa-regular fa-heart cursor-pointer text-black"
+              onClick={() => dispatch(likedUserPost(postId))}
+            ></i>
+            <span className="text-black text-lg">{likes?.length}</span>
+          </div>
         ) : (
-          <i
-            className="fa-solid fa-heart cursor-pointer text-black"
-            onClick={() => dispatch(unLikedUserPost(postId))}
-          >
-            {likes?.length}
-          </i>
+          <div className="flex items-center gap-2">
+            <i
+              className="fa-solid fa-heart cursor-pointer text-black"
+              onClick={() => dispatch(unLikedUserPost(postId))}
+            ></i>
+            <span className="text-black text-lg">{likes?.length}</span>
+          </div>
         )}
         <i className="fa-regular fa-comment cursor-pointer text-black"></i>
         <i className="fa-solid fa-share cursor-pointer text-black"></i>
