@@ -11,9 +11,9 @@ export const Bookmark = () => {
     bookmarks?.includes(post?.postId)
   );
   return (
-    <div className="m-10">
+    <div className="m-6">
       <h1 className="text-black text-4xl m-4 text-center">My Bookmarks</h1>
-      <div className="flex flex-col gap-4 sm:w-full">
+      <div className="flex flex-col justify-center gap-4">
         {mybookmarked?.map((post) => {
           return (
             <PostCard {...post} postUser={post.firstName} key={post.postId} />

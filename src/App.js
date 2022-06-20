@@ -1,5 +1,7 @@
 import "./App.css";
 import { Footer, Main, Navbar } from "./layout";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -7,6 +9,7 @@ function App() {
       <Navbar />
       <Main />
       <Footer />
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 }

@@ -6,8 +6,8 @@ export const SuggestToFollow = () => {
   const { users, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   return (
-    <div className="suggestions hidden sm:block">
-      <div className="p-2 max-w-md bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700 sticky top-14 mt-2">
+    <div className="suggestions hidden md:block mr-4 ">
+      <div className="p-2 max-w-md bg-gray-100 rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700 sticky top-14 mt-2">
         <div className="flex justify-between items-center mb-4 gap-1">
           <h5 className=" font-bold leading-none  dark:text-white">
             Suggestions for you

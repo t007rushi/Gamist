@@ -27,7 +27,7 @@ export const CreatePost = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-4">
       <input
         type="text"
         className="border-black border-2 p-2 rounded-lg"

@@ -44,7 +44,7 @@ export const Signup = () => {
           First Name
           <input
             type="text"
-            autocomplete="on"
+            autoComplete="on"
             placeholder="First Name"
             className="bg-slate-900 rounded-md p-1 w-72"
             onChange={(e) =>
@@ -59,7 +59,7 @@ export const Signup = () => {
           Last Name
           <input
             type="text"
-            autocomplete="on"
+            autoComplete="on"
             placeholder="Last Name"
             className="bg-slate-900 rounded-md p-1 w-72"
             onChange={(e) =>
@@ -74,7 +74,7 @@ export const Signup = () => {
           Email
           <input
             type="email"
-            autocomplete="on"
+            autoComplete="on"
             placeholder="Enter Email"
             className="bg-slate-900 rounded-md p-1 w-72"
             onChange={(e) =>
@@ -89,7 +89,7 @@ export const Signup = () => {
           Create Password
           <input
             type="password"
-            autocomplete="on"
+            autoComplete="on"
             placeholder="Enter password"
             className="bg-slate-900 rounded-md p-1 w-72"
             onChange={(e) =>

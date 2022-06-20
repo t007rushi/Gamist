@@ -13,8 +13,8 @@ export const CategoriesFilter = ({
             key={category.id}
             className={
               category.categoryName === currentCategory
-                ? "p-2 text-sm text-center font-medium rounded-full border-2 shadow-md border-gray-200 text-white bg-black w-40"
-                : "p-2 whitespace-nowrap text-sm text-center font-medium rounded-full shadow-md border-2 border-gray-200 text-gray-900 bg-white  hover:bg-gray-100 hover:text-blue-700 w-40"
+                ? "p-2 text-sm text-center font-medium rounded-full border-2 shadow-md border-gray-200 text-white bg-gray-700 w-28"
+                : "p-2 whitespace-nowrap text-sm text-center font-medium rounded-full shadow-md border-2 border-gray-200 text-gray-900 bg-white  hover:bg-gray-100 hover:text-blue-700 w-28"
             }
             htmlFor={category.categoryName}
           >

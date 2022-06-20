@@ -11,6 +11,7 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import { database } from "../../firbaseConfig";
+import { toast } from "react-toastify";
 
 export const initialState = {
   posts: [],
@@ -35,9 +36,10 @@ export const createPost = createAsyncThunk(
       await updateDoc(postRef, { postId: postRef.id });
       const postSnap = await getDoc(postRef);
       const post = postSnap.data();
+      toast.success("Post created Successfully! Checkout in Latest ones");
       return { ...post, postId: post.userId };
     } catch (error) {
-      console.error(error);
+      toast.error("Error While creating post");
       return Promise.reject(error);
     }
   }
@@ -50,9 +52,10 @@ export const deletePost = createAsyncThunk(
     const postRef = doc(database, "posts", postId);
     try {
       await deleteDoc(postRef);
+      toast.success("Post Deleted Successfully!");
       return postRef.id;
     } catch (error) {
-      console.error(error);
+      toast.error("Error While Deleting post");
       return Promise.reject(error);
     }
   }
@@ -67,9 +70,10 @@ export const editPost = createAsyncThunk(
       await updateDoc(postDataRef, { ...postData });
       const docRef = await getDoc(postDataRef);
       const editedData = { ...docRef.data(), postId: postDataRef.postId };
+      toast.success("Post Edited Successfully!");
       return editedData;
     } catch (error) {
-      console.error(error);
+      toast.error("Error While Editing post");
       return Promise.reject(error);
     }
   }
@@ -85,7 +89,7 @@ export const getAllPosts = createAsyncThunk("post/getAllPosts", async () => {
     });
     return posts;
   } catch (error) {
-    console.error(error);
+    toast.error(error);
     return Promise.reject(error);
   }
 });
@@ -104,7 +108,7 @@ export const likedUserPost = createAsyncThunk(
       });
       return { PostId: postId, userId: userData.userId };
     } catch (error) {
-      console.error(error);
+      toast.error(error);
       return Promise.reject(error);
     }
   }
@@ -124,7 +128,7 @@ export const unLikedUserPost = createAsyncThunk(
 
       return { PostId: postId, userId: userData.userId, isLiked: false };
     } catch (error) {
-      console.error(error);
+      toast.error(error);
       return Promise.reject(error);
     }
   }
@@ -144,9 +148,10 @@ export const addComments = createAsyncThunk(
       });
       updateDoc(postscommentRef, { id: postscommentRef.id });
       const postSnapData = await getDoc(postscommentRef);
+      toast.success(`${comment} Comment Added Successfully!`);
       return { ...postSnapData.data(), id: postSnapData.id };
     } catch (error) {
-      console.error(error);
+      toast.error(error);
       return Promise.reject(error);
     }
   }
@@ -159,9 +164,10 @@ export const deleteComments = createAsyncThunk(
     const commentRef = doc(database, "comments", commentId);
     try {
       await deleteDoc(commentRef);
+      toast.success("Comment Deleted Successfully!");
       return commentRef.id;
     } catch (error) {
-      console.error(error);
+      toast.error(error);
       return Promise.reject(error);
     }
   }
@@ -178,7 +184,7 @@ export const getAllComments = createAsyncThunk(
       );
       return allcomments;
     } catch (error) {
-      console.error(error);
+      toast.error(error);
       return Promise.reject(error);
     }
   }
