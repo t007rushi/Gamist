@@ -13,8 +13,8 @@ export const Profile = () => {
   const userPosts = posts.filter((post) => post.userId === user.userId);
 
   return (
-    <div className="flex flex-col justify-center items-center gap-2 relative mt-20">
-      <div className="w-96 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 mt-2">
+    <div className="flex flex-col  justify-center items-center gap-2 relative m-2">
+      <div className="w-96 bg-gray-100 rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 mt-2">
         <div className="flex justify-end px-4 pt-4">
           <button
             id="dropdownButton"
@@ -68,10 +68,11 @@ export const Profile = () => {
             src="https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg"
             alt="profile"
           />
-          <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+          <h5 className="mb-1 text-2xl font-medium text-gray-900 dark:text-white">
             {user?.firstName}
           </h5>
-          <span className="text-sm text-gray-900 dark:text-gray-400">
+          <span className="text-lg text-gray-900 dark:text-gray-400">
+            portfolio :-{" "}
             {user.portfolioLink === null
               ? "add a portfolio link by clicking Edit"
               : user.portfolioLink}
@@ -109,7 +110,7 @@ export const Profile = () => {
           </ul>
         </div>
       </div>
-      <div className="flex flex-col-reverse gap-4 w-72 mb-8">
+      <div className="flex flex-col-reverse gap-4 w-full">
         {userPosts?.map((post) => {
           return (
             <PostCard {...post} postUser={post.firstName} key={post.postId} />

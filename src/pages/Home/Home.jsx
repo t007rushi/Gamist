@@ -15,17 +15,11 @@ export const Home = () => {
   const [currentCategory, setCurrentCategory] = useState("✨Latest");
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.posts);
-  const {
-    user: { following },
-  } = useSelector((state) => state.auth);
-
-  const followingsPosts = posts.filter((post) =>
-    following?.includes(post.userId)
-  );
 
   const selectCategoryHandler = (value) => {
     setCurrentCategory(value);
   };
+  let filteredPosts = FilterHandler(currentCategory, [...posts]);
 
   useEffect(() => {
     dispatch(getAllPosts());
@@ -33,19 +27,17 @@ export const Home = () => {
     dispatch(getAllComments());
   }, []);
 
-  let filteredPosts = FilterHandler(currentCategory, followingsPosts);
-
   return (
-    <div className="flex justify-center gap-4 text-gray-900 mt-20">
-      <div className="posts">
-        <div className="create-post">
+    <div className="flex justify-center gap-4 text-gray-900">
+      <div className="m-4 flex-1">
+        <div className="border-2 border-gray-300 rounded-2xl p-2">
           <CreatePost />
         </div>
         <CategoriesFilter
           currentCategory={currentCategory}
           selectCategoryHandler={selectCategoryHandler}
         />
-        <div className="posts-column flex flex-col-reverse gap-4 mb-8">
+        <div className="flex flex-col-reverse gap-4 mb-8 w-full">
           {filteredPosts.map((post) => {
             return (
               <PostCard {...post} postUser={post.firstName} key={post.postId} />

@@ -43,7 +43,7 @@ export const Login = () => {
           Email
           <input
             type="email"
-            autocomplete="on"
+            autoComplete="on"
             value={logdata.email}
             placeholder="Enter the Email"
             className="bg-slate-900 rounded-md p-1 w-72"
@@ -58,7 +58,7 @@ export const Login = () => {
           <input
             type="password"
             value={logdata.password}
-            autocomplete="on"
+            autoComplete="on"
             placeholder="Enter password"
             className="bg-slate-900 rounded-md p-1 w-72"
             onChange={(e) =>
