@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SignOut } from "../../features/auth/authSlice";
+import { navbarData } from "./navbarData";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -28,25 +29,24 @@ export const Navbar = () => {
   }, [isLoggedIn]);
 
   return (
-    <div className="fixed top-0 z-10 bg-slate-800 w-full h-14 text-gray-50 flex flex-row items-center justify-between">
-      <h1 className="font-bold text-2xl">GAMIST</h1>
+    <div className="fixed top-0 z-20 bg-slate-800 w-full h-14 text-gray-50 flex flex-row items-center justify-between">
+      <div className="flex gap-2 items-center ml-2">
+        <img src="/assets/logo.jpg" alt="" className="w-10 h-10" />
+        <h1 className="font-bold text-2xl hidden sm:block">GAMIST</h1>
+      </div>
       {isLoggedIn && (
         <div className="flex items-center">
-          <Link to="/home" className="p-2 m-2 text-2xl">
-            <i className="fa-solid fa-house"></i>
-          </Link>
-          <Link to="/bookmarks" title="bookmark" className="p-2 m-2 text-2xl">
-            <i className="fa-solid fa-bookmark"></i>
-          </Link>
-          <Link to="/home" className="p-2 m-2 text-2xl">
-            <i className="fa-solid fa-square-plus"></i>
-          </Link>
-          <Link to="/explore" className="p-2 m-2 text-2xl">
-            <i className="fa-solid fa-compass"></i>
-          </Link>
-          <Link to="/profile" className=" p-2 text-2xl">
-            <i className="fa-solid fa-user"></i>
-          </Link>
+          {navbarData.map((nav) => {
+            return (
+              <Link
+                to={nav.link}
+                title={nav.title}
+                className="p-2 m-2 text-2xl sm:hidden"
+              >
+                <i className={nav.icon}></i>
+              </Link>
+            );
+          })}
           <button className="p-2 m-2 text-2xl" onClick={signmeout}>
             <i className="fa-solid fa-arrow-right-from-bracket"></i>
           </button>
