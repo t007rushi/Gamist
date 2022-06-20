@@ -11,6 +11,7 @@ import {
   unLikedUserPost,
 } from "../features/posts/postSlice";
 import { addBookmark, removeBookmark } from "../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export const PostCard = ({ postUser, title, description, postId, likes }) => {
   const {
@@ -22,6 +23,7 @@ export const PostCard = ({ postUser, title, description, postId, likes }) => {
   const [comment, setComment] = useState("");
   const optionref = useRef();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useOnClickOutside(optionref, () => setPostModal(false));
   const currentPostcomments = comments.filter((com) => com.postId === postId);
 
@@ -94,7 +96,14 @@ export const PostCard = ({ postUser, title, description, postId, likes }) => {
             <span className="text-black text-lg">{likes?.length}</span>
           </div>
         )}
-        <i className="fa-regular fa-comment cursor-pointer text-black"></i>
+        <div className="flex gap-2 items-center text-black">
+          <i
+            className="fa-regular fa-comment cursor-pointer text-black"
+            onClick={() => navigate(`/posts/${postId}`)}
+          ></i>
+          <span>{currentPostcomments.length}</span>
+        </div>
+
         <i className="fa-solid fa-share cursor-pointer text-black"></i>
         {!bookmarks?.includes(postId) ? (
           <i
