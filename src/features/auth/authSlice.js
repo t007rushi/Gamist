@@ -21,8 +21,9 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
-
 import { app, database } from "../../firbaseConfig";
+import { toast } from "react-toastify";
+
 const auth = getAuth();
 const initialState = {
   isLoggedIn: false,
@@ -46,6 +47,7 @@ export const SignIn = createAsyncThunk(
       const auth = getAuth(app);
       const data = await signInWithEmailAndPassword(auth, email, password);
       const userDoc = await getDoc(doc(database, "users", data.user.uid));
+      toast.success("Sign In Sucessfully");
       return userDoc.data();
     } catch (error) {
       console.error(error);
@@ -124,6 +126,7 @@ export const SignUp = createAsyncThunk(
         followers: [],
         following: [],
       });
+      toast.success("Sign Up Sucessfully");
       return {
         firstName,
         lastName,
@@ -144,6 +147,7 @@ export const SignOut = createAsyncThunk("auth/SignOut", () => {
   try {
     const auth = getAuth(app);
     signOut(auth).then(() => {});
+    toast.success("Sign out Sucessfully");
   } catch (error) {
     console.error(error);
     return Promise.reject(error);
@@ -182,6 +186,7 @@ export const updateUserDetails = createAsyncThunk(
       const userRef = doc(database, "users", userId);
       await updateDoc(userRef, { ...userData });
       const newUserData = await getDoc(userRef);
+      toast.success("User Details updated");
       return newUserData.data();
     } catch (error) {
       console.error(error);
@@ -201,6 +206,7 @@ export const addBookmark = createAsyncThunk(
       await updateDoc(postDocumentRef, {
         bookmarks: arrayUnion(postId),
       });
+      toast.success("Post Bookmarked");
       return { PostId: postId, userId: uId };
     } catch (error) {
       console.error(error);
@@ -220,6 +226,7 @@ export const removeBookmark = createAsyncThunk(
       await updateDoc(postDocumentRef, {
         bookmarks: arrayRemove(postId),
       });
+      toast.success("Removed From Bookmarks");
       return { PostId: postId, userId: uId };
     } catch (error) {
       console.error(error);
