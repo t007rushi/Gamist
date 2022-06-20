@@ -36,14 +36,15 @@ export const Navbar = () => {
       </div>
       {isLoggedIn && (
         <div className="flex items-center">
-          {navbarData.map((nav) => {
+          {navbarData.map(({title,link,icon}) => {
             return (
               <Link
-                to={nav.link}
-                title={nav.title}
+              key={title}
+                to={link}
+                title={title}
                 className="p-2 m-2 text-2xl sm:hidden"
               >
-                <i className={nav.icon}></i>
+                <i className={icon}></i>
               </Link>
             );
           })}

@@ -9,6 +9,7 @@ import {
   NotFoundPage,
   Bookmark,
   Explore,
+  SinglePost,
 } from "../../pages";
 import { LeftSideNav } from "../Navbar/LeftSideNav";
 
@@ -27,6 +28,7 @@ export const Main = () => {
           <Route path="/bookmarks" element={<Bookmark />}></Route>
           <Route path="/explore" element={<Explore />}></Route>
           <Route path="/*" element={<NotFoundPage />}></Route>
+          <Route path="/posts/:postid" element={<SinglePost />}></Route>
         </Routes>
       </div>
     </div>
